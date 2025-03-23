@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streamify - Latest Videos</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #121212;
+            color: #fff;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: #1f1f1f;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin: 10px;
+        }
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: #e50914;
+        }
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .video-card {
+            background: #222;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .video-card:hover {
+            transform: scale(1.05);
+        }
+        .home-btn {
+        background: #e50914;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 25px;
+        font-weight: bold;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .home-btn:hover {
+        background: #c00710;
+        transform: scale(1.05);
+    }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Streamify</div>
+    <nav>
+        <button class="home-btn" onclick="window.location.href='index.html'"> Back to Home</button>
+    </nav>
+</header>
+
+<main>
+    <section>
+        <h2 style="text-align: center;">Latest Videos & Series</h2>
+        <div class="video-grid" id="trending-videos">
+            <!-- Trending videos will be loaded here dynamically -->
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2025 Streamify. All rights reserved.</p>
+</footer>
+
+<script>
+    async function fetchTrendingVideos() {
+        const apiKey = "AIzaSyC9Hve2FqFiNKm5xj7WRF10UrVSeV7VOuY"; // Replace with a valid YouTube API key
+        const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=US&maxResults=10&key=${apiKey}`;
+        
+        try {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+
+            if (data.items) {
+                const videoGrid = document.getElementById("trending-videos");
+                videoGrid.innerHTML = data.items.map(video => `
+                    <div class="video-card">
+                        <iframe width="100%" height="200" src="https://www.youtube.com/embed/${video.id}" frameborder="0" allowfullscreen></iframe>
+                        <p>${video.snippet.title}</p>
+                    </div>
+                `).join('');
+            }
+        } catch (error) {
+            console.error("Error fetching trending videos:", error);
+        }
+    }
+
+    fetchTrendingVideos();
+</script>
+
+</body>
+</html>

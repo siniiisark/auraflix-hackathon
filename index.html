@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streamify - Home</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: url(backimage.jpg);
+            color: #fff;
+            opacity: 10;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: #202020;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin: 10px;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff4500;
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+        .search-bar {
+            padding: 12px;
+            width: 280px;
+            border-radius: 25px;
+            border: none;
+            outline: none;
+            background: #333;
+            color: #fff;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .filter-dropdown {
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            background: #333;
+            color: #fff;
+        }
+        .login-btn {
+            background: #ff4500;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .login-btn:hover {
+            background: #cc3700;
+        }
+        .hero {
+            position: relative;
+            text-align: center;
+            padding: 120px 20px;
+            background: url('hero-banner.jpg') center/cover no-repeat;
+            border-radius: 10px;
+            margin: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        .overlay h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        .cta-btn {
+            background: #ff4500;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .cta-btn:hover {
+            background: #cc3700;
+        }
+        .categories {
+            padding: 40px;
+            background: #202020;
+            border-radius: 10px;
+            margin: 20px;
+        }
+        .categories h2 {
+            font-size: 26px;
+            margin-bottom: 15px;
+            color: #ff4500;
+        }
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .video-card {
+            background: #282828;
+            padding: 20px;
+            text-align: center;
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        .video-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #202020;
+            margin-top: 20px;
+            font-size: 14px;
+            border-radius: 10px;
+        }
+
+    .search-btn {
+        background: #e50914;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 10px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .search-btn:hover {
+        background: #c00710;
+        transform: scale(1.05);
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Streamify</div>
+        <nav>
+            <select id="filter-options" class="filter-dropdown">
+                <option value="all">All</option>
+                <option value="movies">Movies</option>
+                <option value="series">Series</option>
+            </select>
+            <input type="text" id="search-bar" placeholder="Search videos..." class="search-bar">
+            <button class="search-btn" onclick="searchContent()">🔍 Search</button>
+            <button class="login-btn" onclick="window.location.href='signin.html'">Sign In</button>
+
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <video autoplay muted loop class="featured-video">
+                <source src="featured.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="overlay">
+                <h1>Watch the Best Content Anytime, Anywhere</h1>
+                <button class="cta-btn" onclick="window.location.href='latest.html'">Start Watching</button>
+            </div>
+        </section>
+        
+        <section class="categories">
+            <h2>Trending Now</h2>
+            <div class="video-grid" id="trending-videos">
+                <!-- Trending videos will be loaded here dynamically -->
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Streamify. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        async function fetchTrendingVideos() {
+    const apiKey = "AIzaSyC9Hve2FqFiNKm5xj7WRF10UrVSeV7VOuY"; // Replace with your actual API key
+    const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=US&maxResults=10&key=${apiKey}`;
+
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        if (data.items) {
+            const videoGrid = document.getElementById("trending-videos");
+            videoGrid.innerHTML = data.items.map(video => `
+                <div class="video-card">
+                    <iframe width="100%" height="200" src="https://www.youtube.com/embed/${video.id}" frameborder="0" allowfullscreen></iframe>
+                    <p>${video.snippet.title}</p>
+                </div>
+            `).join('');
+        }
+    } catch (error) {
+        console.error("Error fetching trending videos:", error);
+    }
+}
+
+fetchTrendingVideos();
+
+    const API_KEY = "AIzaSyC9Hve2FqFiNKm5xj7WRF10UrVSeV7VOuY"; // Replace with your YouTube API Key
+
+    async function searchYouTube() {
+        const query = document.getElementById("search-bar").value;
+        const filter = document.getElementById("filter-options").value;
+
+        let searchQuery = query;
+        if (filter === "movie") searchQuery += " full movie";
+        if (filter === "series") searchQuery += " TV series";
+
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(searchQuery)}&type=video&key=${API_KEY}&maxResults=10`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Failed to fetch videos");
+
+            const data = await response.json();
+            displaySearchResults(data.items);
+        } catch (error) {
+            console.error("Error fetching search results:", error);
+        }
+    }
+
+    function displaySearchResults(videos) {
+        const videoGrid = document.getElementById('trending-videos');
+        videoGrid.innerHTML = videos.length > 0 ? videos.map(video => `
+            <div class="video-card">
+                <iframe width="100%" height="200" src="https://www.youtube.com/embed/${video.id.videoId}" frameborder="0" allowfullscreen></iframe>
+                <p>${video.snippet.title}</p>
+            </div>
+        `).join('') : `<p>No results found.</p>`;
+    }
+
+    
+
+
+    </script>
+</body>
+</html>

@@ -182,12 +182,12 @@
     </main>
     
     <footer>
-        <p>&copy; 2025 Streamify. All rights reserved.</p>
+        <p>&copy; 2025 Streamify(gurl bosses). All rights reserved.</p>
     </footer>
     
     <script>
         async function fetchTrendingVideos() {
-    const apiKey = ""; // Replace with your actual API key
+    const apiKey = ""; 
     const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=US&maxResults=10&key=${apiKey}`;
 
     try {
@@ -210,7 +210,7 @@
 
 fetchTrendingVideos();
 
-    const API_KEY = ""; // Replace with your YouTube API Key
+    const API_KEY = ""; 
 
     async function searchYouTube() {
         const query = document.getElementById("search-bar").value;
